@@ -1,0 +1,6 @@
+#!/usr/bin/env Rscript
+
+# <name>        <flag>                  <type>   <range>
+spp             "--alg-use-spp "         c       (true, false)
+ages.max.iter   "--ages-max-iter "       i       (30, 10000)
+perc.pert.size  "--alg-perc-pert-size "  r       (0.01, 0.99)
