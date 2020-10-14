@@ -9,7 +9,8 @@ parameterFile = "./parameters.txt"
 execDir = "./arena"
 
 ## Directory where tuning instances are located, relative to current directory.
-trainInstancesDir = "/home/alberto/work/math-pdptw/instances-li-lim/pdp_100"
+## Change the trainInstancesDIr depending on where are yours instances.
+trainInstancesDir = "../instances/pdp_100"
 trainInstancesFile = "./train_instances.txt"
 
 ## The script called for each configuration that launches the program to be
