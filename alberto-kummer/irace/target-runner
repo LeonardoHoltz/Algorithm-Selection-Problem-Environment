@@ -17,7 +17,7 @@ error() {
 }
 
 # Path to the solver from inside the arena directory.
-EXE="/home/alberto/work/math-pdptw/code/main"
+EXE="../../code/main"
 MAXTIME=60
 INST_FMT=ll
 PRINT_IRACE=irace
