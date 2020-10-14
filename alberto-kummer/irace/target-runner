@@ -20,6 +20,7 @@ error() {
 EXE="/home/alberto/work/math-pdptw/code/main"
 MAXTIME=60
 INST_FMT=ll
+PRINT_IRACE=irace
 
 # Gives more meaningful names to the script arguments
 CONFIG_ID="$1"
@@ -41,8 +42,8 @@ if [ ! -x "${EXE}" ]; then
 fi
 
 # Runs the solver.
-echo "Command: $EXE -f $INST_FMT -s $SEED -t $MAXTIME ${CONFIG_PARAMS} < $INSTANCE" > $STDOUT
-$EXE -f $INST_FMT -s $SEED -t $MAXTIME ${CONFIG_PARAMS} < $INSTANCE 1>> $STDOUT 2> $STDERR
+echo "Command: $EXE -f $INST_FMT -s $SEED -t $MAXTIME --print $PRINT_IRACE ${CONFIG_PARAMS} < $INSTANCE" > $STDOUT
+$EXE -f $INST_FMT -s $SEED -t $MAXTIME --print $PRINT_IRACE ${CONFIG_PARAMS} < $INSTANCE 1>> $STDOUT 2> $STDERR
 
 # Check if there is any data in the stdout.
 # The inexistence of this file may indicate an error in the execution
