@@ -1,0 +1,11 @@
+#!/usr/bin/env Rscript
+
+# If you want to use the original ages, substitute the "parameters.txt" with the contents of this file
+
+# <name>        	<flag>                 		<type>	<range>
+spp					"--alg-use-spp "			c		(true, false)
+alg.perc.pert.size	"--alg-perc-pert-size "		r		(0.01, 0.99)
+alg.ages			"--alg-ages "				c		(original)
+alg.pert.prob		"--alg-pert-prob "			r		(0.0, 1.0)
+ages.max.iter		"--ages-max-iter "			c		(10000, 100000, 1000000)
+ages.pert.size		"--ages-pert-size "			c		(10, 100, 1000)
