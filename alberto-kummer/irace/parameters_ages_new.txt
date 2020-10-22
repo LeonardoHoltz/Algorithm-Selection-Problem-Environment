@@ -5,7 +5,7 @@
 # <name>        	<flag>						<type>	<range>
 spp					"--alg-use-spp "			c		(true, false)
 alg.perc.pert.size	"--alg-perc-pert-size "		r		(0.0, 1.0)
-alg.ages			"--alg-ages "				c		(original, new)
+alg.ages			"--alg-ages "				c		(new)
 alg.pert.prob		"--alg-pert-prob "			r		(0.0, 1.0)
 ages.max.iter		"--ages-max-iter "			i		(1000, 15000)
 ages.perc.pert.size	"--ages-perc-pert-size "	r		(0.0, 1.0)
