@@ -53,129 +53,166 @@ class Task:
         # If both the pickup and delivery IDs are zero, it means that the task is the depot
 
 
-file_name = sys.argv[1]
-file = open(file_name, "r")
+features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "stdDeviation", "distanceMedian", "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", "convex_hull_length", "points_inside_hull", "convex_hull_area"]
 
-first_line = file.readline()
-
-# Getting the vehicles and capacity by the first line:
-
-first_line = first_line.split("\t")
-
-vehicles = int(first_line[0])
-capacity = int(first_line[1])
-
-# Reading of the tasks:
-
-pickupTasks = {}
-pickupIDs = []
-deliveryTasks = {}
-deliveryIDs = []
-depotTask = None
-
-lines = file.readlines()
-N_Tasks = len(lines)
-for line in lines:
-    line = line.split("\t")
-    line = list(map(int, line))
-    task = Task(line[0], line[1], line[2], line[4], line[5], line[7], line[8])
-    if task.pickupID == 0 and task.deliveryID == 0:
-        depotTask = task
-    else:
-        if task.pickupID == 0:
-            pickupTasks[task.taskID] = task
-            pickupIDs.append(task.taskID)
-        else:
-            deliveryTasks[task.taskID] = task
-            deliveryIDs.append(task.taskID)
-
-# Start of the features extraction:
-
-# Average Distance, Min Distance & Max Distance:
-
-totalDistance = 0
-distances = []
-minDistance = float('inf')
-maxDistance = float('-inf')
-
-for ID in pickupIDs:
-    task1 = pickupTasks[ID]
-    task2 = deliveryTasks[pickupTasks[ID].deliveryID]
-    distance = distanceTwoTasks(task1, task2)
-    if distance > maxDistance:
-        maxDistance = distance
-    elif distance < minDistance:
-        minDistance = distance
-    totalDistance += distance
-    distances.append(distance)
-
-avgDistance = totalDistance / (N_Tasks / 2)
-
-# Standard Deviation of the Dsitance:
-
-soma = 0
-for distance in distances:
-    soma = (distance - avgDistance) ** 2
-
-stdDeviation = math.sqrt(soma/(N_Tasks / 2))
-
-# Median Distance:
-
-distances.sort()
-if len(distances) % 2 == 0:
-    median = (distances[len(distances)/2] + distances[len(distances)/2 - 1]) / 2
-else:
-    median = distances[math.floor(len(distances)/2)]
-
-# Initial Point
-
-#depotTask.x
-#depotTask.y
-
-# Total Amount of Points
-
-#N_Tasks
-
-# Convex Hull
-
-# List with all points:
-points = []
-points.append((depotTask.x, depotTask.y))
-for pickup_id in pickupIDs:
-    points.append((pickupTasks[pickup_id].x, pickupTasks[pickup_id].y))
-for delivery_id in deliveryIDs:
-    points.append((deliveryTasks[delivery_id].x, deliveryTasks[delivery_id].y))
-
-convex_hull = graham_scan.grahamScan(points)
-
-# Total Amount of Points in the Convex Hull
-
-convex_hull_points = len(convex_hull)
-
-# Convex Hull Length
-
-convex_hull_length = 0
-for i in range(len(convex_hull)-1):
-    convex_hull_length += graham_scan.distance(convex_hull[i], convex_hull[i+1])
-convex_hull_length += graham_scan.distance(convex_hull[-1], convex_hull[0])
-
-# Total Amount of Points inside the Convex Hull
-
-points_inside_hull = 0
-for pickup_id in pickupIDs:
-    if(isInside(pickupTasks[pickup_id].x, pickupTasks[pickup_id].x, convex_hull)):
-        points_inside_hull += 1
-for delivery_id in deliveryIDs:
-    if(isInside(deliveryTasks[delivery_id].x, deliveryTasks[delivery_id].x, convex_hull)):
-        points_inside_hull += 1
-
-# Convex Hull Area
-
-convex_hull_area = polygonArea(convex_hull)
-
-# Insertion of the features in the CSV file
-features_list = [file_name, avgDistance, minDistance, maxDistance, stdDeviation, median, depotTask.x, depotTask.y, N_Tasks, convex_hull_points, convex_hull_length, points_inside_hull, convex_hull_area]
-
-with open("features.csv", "a") as features_file:
+with open("features.csv", "a", newline='') as features_file:
     wr = csv.writer(features_file, dialect='excel')
     wr.writerow(features_list)
+features_file.close()
+
+instances_names_file = sys.argv[1]
+inst_file = open(instances_names_file, "r")
+inst_file_lines = inst_file.readlines()
+directory = "instances/all/"
+
+for inst_line in inst_file_lines:
+    inst_line = inst_line[:-1]
+    if not inst_line.startswith("#") and inst_line.endswith(".txt"):
+        file_name = inst_line
+        print(file_name)
+        file = open(directory + file_name, "r")
+
+        first_line = file.readline()
+
+        # Getting the vehicles and capacity by the first line:
+
+        first_line = first_line.split("\t")
+
+        vehicles = int(first_line[0])
+        capacity = int(first_line[1])
+
+        # Reading of the tasks:
+
+        pickupTasks = {}
+        pickupIDs = []
+        deliveryTasks = {}
+        deliveryIDs = []
+        depotTask = None
+
+        lines = file.readlines()
+        N_Tasks = len(lines)
+        for line in lines:
+            line = line.split("\t")
+            line = list(map(int, line))
+            task = Task(line[0], line[1], line[2], line[4], line[5], line[7], line[8])
+            if task.pickupID == 0 and task.deliveryID == 0:
+                depotTask = task
+            else:
+                if task.pickupID == 0:
+                    pickupTasks[task.taskID] = task
+                    pickupIDs.append(task.taskID)
+                else:
+                    deliveryTasks[task.taskID] = task
+                    deliveryIDs.append(task.taskID)
+
+        file.close()
+
+        # Start of the features extraction:
+
+        features_list = [file_name]
+
+        # Average Distance, Min Distance & Max Distance:
+
+        totalDistance = 0
+        distances = []
+        minDistance = float('inf')
+        maxDistance = float('-inf')
+
+        for ID in pickupIDs:
+            task1 = pickupTasks[ID]
+            task2 = deliveryTasks[pickupTasks[ID].deliveryID]
+            distance = distanceTwoTasks(task1, task2)
+            if distance > maxDistance:
+                maxDistance = distance
+            elif distance < minDistance:
+                minDistance = distance
+            totalDistance += distance
+            distances.append(distance)
+
+        avgDistance = totalDistance / (N_Tasks / 2)
+
+        features_list.append(avgDistance)
+        features_list.append(minDistance)
+        features_list.append(maxDistance)
+
+        # Standard Deviation of the Dsitance:
+
+        soma = 0
+        for distance in distances:
+            soma = (distance - avgDistance) ** 2
+
+        stdDeviation = math.sqrt(soma/(N_Tasks / 2))
+
+        # Median Distance:
+
+        distances.sort()
+        if len(distances) % 2 == 0:
+            distanceMedian = (distances[math.floor(len(distances)/2)] + distances[math.floor(len(distances)/2 - 1)]) / 2 # 2 e 3 de 6
+        else:
+            distanceMedian = distances[math.floor(len(distances)/2)]
+
+        features_list.append(distanceMedian)
+
+        # Initial Point
+
+        features_list.append(depotTask.x)
+        features_list.append(depotTask.y)
+
+        # Total Amount of Points
+
+        features_list.append(N_Tasks)
+
+        # Convex Hull
+
+        # List with all points:
+        points = []
+        points.append((depotTask.x, depotTask.y))
+        for pickup_id in pickupIDs:
+            points.append((pickupTasks[pickup_id].x, pickupTasks[pickup_id].y))
+        for delivery_id in deliveryIDs:
+            points.append((deliveryTasks[delivery_id].x, deliveryTasks[delivery_id].y))
+
+        convex_hull = graham_scan.grahamScan(points)
+
+        # Total Amount of Points in the Convex Hull
+
+        convex_hull_points = len(convex_hull)
+
+        features_list.append(convex_hull_points)
+
+        # Convex Hull Length
+
+        convex_hull_length = 0
+        for i in range(len(convex_hull)-1):
+            convex_hull_length += graham_scan.distance(convex_hull[i], convex_hull[i+1])
+        convex_hull_length += graham_scan.distance(convex_hull[-1], convex_hull[0])
+
+        features_list.append(convex_hull_length)
+
+        # Total Amount of Points inside the Convex Hull
+
+        points_inside_hull = 0
+        for pickup_id in pickupIDs:
+            if(isInside(pickupTasks[pickup_id].x, pickupTasks[pickup_id].x, convex_hull)):
+                points_inside_hull += 1
+        for delivery_id in deliveryIDs:
+            if(isInside(deliveryTasks[delivery_id].x, deliveryTasks[delivery_id].x, convex_hull)):
+                points_inside_hull += 1
+
+        features_list.append(points_inside_hull)
+
+        # Convex Hull Area
+
+        convex_hull_area = polygonArea(convex_hull)
+
+        features_list.append(convex_hull_area)
+
+        # Insertion of the features in the CSV file
+
+        with open("features.csv", "a", newline='') as features_file:
+            #wr = csv.writer(features_file, dialect='excel')
+            wr = csv.writer(features_file)
+            wr.writerow(features_list)
+        features_file.close()
+
+inst_file.close()
