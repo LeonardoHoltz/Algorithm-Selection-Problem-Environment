@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 import sys
+import csv
 import math
+import os
 import graham_scan
 
 def distanceTwoTasks(task1, task2):
@@ -58,7 +60,6 @@ first_line = file.readline()
 
 # Getting the vehicles and capacity by the first line:
 
-print(first_line)
 first_line = first_line.split("\t")
 
 vehicles = int(first_line[0])
@@ -110,7 +111,7 @@ for ID in pickupIDs:
 
 avgDistance = totalDistance / (N_Tasks / 2)
 
-# Standard Deviation:
+# Standard Deviation of the Dsitance:
 
 soma = 0
 for distance in distances:
@@ -118,7 +119,7 @@ for distance in distances:
 
 stdDeviation = math.sqrt(soma/(N_Tasks / 2))
 
-# Median:
+# Median Distance:
 
 distances.sort()
 if len(distances) % 2 == 0:
@@ -149,14 +150,14 @@ convex_hull = graham_scan.grahamScan(points)
 
 # Total Amount of Points in the Convex Hull
 
-len(convex_hull)
+convex_hull_points = len(convex_hull)
 
 # Convex Hull Length
 
-convex_hull_lenght = 0
+convex_hull_length = 0
 for i in range(len(convex_hull)-1):
-    convex_hull_lenght += graham_scan.distance(convex_hull[i], convex_hull[i+1])
-convex_hull_lenght += graham_scan.distance(convex_hull[-1], convex_hull[0])
+    convex_hull_length += graham_scan.distance(convex_hull[i], convex_hull[i+1])
+convex_hull_length += graham_scan.distance(convex_hull[-1], convex_hull[0])
 
 # Total Amount of Points inside the Convex Hull
 
@@ -172,3 +173,9 @@ for delivery_id in deliveryIDs:
 
 convex_hull_area = polygonArea(convex_hull)
 
+# Insertion of the features in the CSV file
+features_list = [file_name, avgDistance, minDistance, maxDistance, stdDeviation, median, depotTask.x, depotTask.y, N_Tasks, convex_hull_points, convex_hull_length, points_inside_hull, convex_hull_area]
+
+with open("features.csv", "a") as features_file:
+    wr = csv.writer(features_file, dialect='excel')
+    wr.writerow(features_list)
