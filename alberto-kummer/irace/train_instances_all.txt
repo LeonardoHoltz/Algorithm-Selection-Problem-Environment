@@ -336,7 +336,6 @@ LC2_10_8.txt -t 500
 LC1_10_8.txt -t 500
 LC2_10_9.txt -t 500
 LRC2_10_7.txt -t 500
-LRC2_10_8.txt -t 500
 LR1_10_6.txt -t 500
 LRC1_10_1.txt -t 500
 LRC2_10_4.txt -t 500
@@ -368,7 +367,6 @@ LRC1_10_10.txt -t 500
 #LC1_10_6.txt -t 500
 #LRC1_10_7.txt -t 500
 #LC2_10_5.txt -t 500
-#LRC2_10_9.txt -t 500
 #LR1_10_1.txt -t 500
 #LC1_10_4.txt -t 500
 #LR2_10_10.txt -t 500
