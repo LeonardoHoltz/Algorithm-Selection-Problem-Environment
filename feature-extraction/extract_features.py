@@ -72,7 +72,7 @@ deliveryTasks = {}
 deliveryIDs = []
 depotTask = None
 
-lines = file.readlines()[0:]
+lines = file.readlines()
 N_Tasks = len(lines)
 for line in lines:
     line = line.split("\t")
