@@ -4,6 +4,7 @@ import sys
 import csv
 import math
 import os
+import numpy as np
 import graham_scan
 
 def distanceTwoTasks(task1, task2):
@@ -53,9 +54,13 @@ class Task:
         # If both the pickup and delivery IDs are zero, it means that the task is the depot
 
 
-features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "stdDeviation", "distanceMedian", "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", "convex_hull_length", "points_inside_hull", "convex_hull_area"]
+features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "stdDeviation", "distanceMedian", 
+                    "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", "convex_hull_length", 
+                    "points_inside_hull", "convex_hull_area", "average_timespan", "std_deviation_timespan", 
+                    "highest_last_time", "highest_early_time", "lowest_last_time", "lowest_early_time",
+                    "Q1_early_time", "Q2_early_time", "Q3_early_time", "Q1_late_time", "Q2_late_time", "Q3_late_time"]
 
-with open("features.csv", "a", newline='') as features_file:
+with open("features.csv", "w", newline='') as features_file:
     wr = csv.writer(features_file, dialect='excel')
     wr.writerow(features_list)
 features_file.close()
@@ -135,13 +140,14 @@ for inst_line in inst_file_lines:
         features_list.append(minDistance)
         features_list.append(maxDistance)
 
-        # Standard Deviation of the Dsitance:
+        # Standard Deviation of the Distance:
 
         soma = 0
         for distance in distances:
             soma = (distance - avgDistance) ** 2
 
         stdDeviation = math.sqrt(soma/(N_Tasks / 2))
+        features_list.append(stdDeviation)
 
         # Median Distance:
 
@@ -206,6 +212,39 @@ for inst_line in inst_file_lines:
         convex_hull_area = polygonArea(convex_hull)
 
         features_list.append(convex_hull_area)
+
+        # Average timespan 
+        pickupIDs_timespan = [(pickupTasks[i].latestTime - pickupTasks[i].earliestTime) for i in pickupIDs]
+        deliveryIDs_timespan = [(deliveryTasks[i].latestTime - deliveryTasks[i].earliestTime) for i in deliveryIDs]
+        IDs_timespan = np.array(pickupIDs_timespan + deliveryIDs_timespan)
+
+        features_list.append(np.average(IDs_timespan))
+
+        # Standar deviation timespan
+        features_list.append(np.std(IDs_timespan))
+
+        # High/Low time information
+        early_time = np.array([pickupTasks[i].earliestTime for i in pickupIDs] + [deliveryTasks[i].earliestTime for i in deliveryIDs])
+        late_time  = np.array([pickupTasks[i].latestTime   for i in pickupIDs] + [deliveryTasks[i].latestTime   for i in deliveryIDs])
+            # Highest last time
+        features_list.append(np.max(late_time))
+            # Highest early time
+        features_list.append(np.max(early_time))
+        
+            # Lowest last time
+        features_list.append(np.min(late_time))
+            # Lowest early time
+        features_list.append(np.min(early_time))
+
+        # Quantile&Median early time
+        features_list.append(np.quantile(early_time, q=0.25))
+        features_list.append(np.quantile(early_time, q=0.50)) # same as median
+        features_list.append(np.quantile(early_time, q=0.75))
+
+        # Quantile&Median late time
+        features_list.append(np.quantile(late_time, q=0.25))
+        features_list.append(np.quantile(late_time, q=0.50)) # same as median
+        features_list.append(np.quantile(late_time, q=0.75))
 
         # Insertion of the features in the CSV file
 
