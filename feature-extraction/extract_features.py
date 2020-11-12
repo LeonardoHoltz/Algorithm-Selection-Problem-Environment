@@ -115,6 +115,7 @@ for inst_line in inst_file_lines:
 
             vehicles = int(first_line[0])
             capacity = int(first_line[1])
+            distribution = ''
 
             # Reading of the tasks:
 
@@ -138,6 +139,7 @@ for inst_line in inst_file_lines:
 
             lines = file.readlines()
             N_Tasks = int(lines[4].split(' ')[1]) # SIZE line
+            distribution = lines[5].split(' ')[1].lower() # DISTRIBUTION line
             capacity = int(lines[9].split(' ')[1]) # CAPACITY line
 
             # Reading task nodes:
@@ -332,7 +334,7 @@ for inst_line in inst_file_lines:
         features_list.append((depotTask.latestTime - depotTask.earliestTime) / len(pickupTasks))
         
         # Clusters of data
-        if (file_name.lower().startswith("lc") or file_name.lower().startswith("lrc")): # currently working only for li&lim
+        if (file_name.lower().startswith("lc") or file_name.lower().startswith("lrc") or ('cluster' in distribution)): # checks name file for li&lim and distribution information in Carlos's
             xy_data = [[float(pickupTasks[i].x), float(pickupTasks[i].y)] for i in pickupIDs] + [[float(deliveryTasks[i].x), float(deliveryTasks[i].y)] for i in deliveryIDs]
             xy_data = np.array(xy_data)
             n_clusters, avg_size_cluster = cluster_points.number_clusters(xy_data)
