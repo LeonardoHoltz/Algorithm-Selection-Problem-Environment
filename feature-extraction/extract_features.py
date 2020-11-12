@@ -44,23 +44,36 @@ def polygonArea(polygon):
     return abs(area/2)
 
 class Task:
-    def __init__(self, ID, x, y, earliestTime, latestTime, pickupID, deliveryID):
+    def __init__(self, ID, x, y, demand, earliestTime, latestTime, serviceTime, pickupID, deliveryID):
         self.taskID = ID
         self.x = x
         self.y = y
+        self.demand = demand
         self.earliestTime = earliestTime
         self.latestTime = latestTime
+        self.serviceTime = serviceTime
         self.pickupID = pickupID        # If the pickupID is zero, it means that the task itself is a pickup point
         self.deliveryID = deliveryID    # If the deliveryID is zero, it means that the task itself is a delivery point
         # If both the pickup and delivery IDs are zero, it means that the task is the depot
+    
+    """
+    def to_str(self):
+        return "Id: " + str(self.taskID) + ", x: " + str(self.x) + ", y: " + str(self.y) + 
+                ", demand: " + str(self.demand) + ", etw: " + str(self.earliestTime) + ", ltw: " + 
+                str(self.latestTime) + ", pickup: " + str(self.pickupID) + ", delivery: " + str(self.deliveryID)
+    """
 
 
-features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "stdDeviation", "distanceMedian", 
-                    "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", "convex_hull_length", 
-                    "points_inside_hull", "convex_hull_area", "average_timespan", "std_deviation_timespan", 
-                    "highest_last_time", "highest_early_time", "lowest_last_time", "lowest_early_time",
-                    "Q1_early_time", "Q2_early_time", "Q3_early_time", "Q1_late_time", "Q2_late_time", "Q3_late_time",
+
+
+features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "symmetry_index", "stdDeviation", 
+                    "distanceMedian", "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", 
+                    "convex_hull_length", "points_inside_hull", "convex_hull_area", "average_timespan", 
+                    "std_deviation_timespan", "highest_last_time", "highest_early_time", "lowest_last_time", 
+                    "lowest_early_time", "Q1_early_time", "Q2_early_time", "Q3_early_time", "Q1_late_time", 
+                    "Q2_late_time", "Q3_late_time", "avgDemand",  "capacity", "avgService", "timeByNumOfRequests",
                     "n_clusters", "avg_clusterSize"]
+
 
 with open("features.csv", "w", newline='') as features_file:
     wr = csv.writer(features_file, dialect='excel')
@@ -79,16 +92,10 @@ for inst_line in inst_file_lines:
         print(file_name)
         file = open(directory + file_name, "r")
 
-        first_line = file.readline()
+        vehicles = 0
+        capacity = 0
 
-        # Getting the vehicles and capacity by the first line:
-
-        first_line = first_line.split("\t")
-
-        vehicles = int(first_line[0])
-        capacity = int(first_line[1])
-
-        # Reading of the tasks:
+        N_Tasks = 0
 
         pickupTasks = {}
         pickupIDs = []
@@ -96,21 +103,66 @@ for inst_line in inst_file_lines:
         deliveryIDs = []
         depotTask = None
 
-        lines = file.readlines()
-        N_Tasks = len(lines)
-        for line in lines:
-            line = line.split("\t")
-            line = list(map(int, line))
-            task = Task(line[0], line[1], line[2], line[4], line[5], line[7], line[8])
-            if task.pickupID == 0 and task.deliveryID == 0:
-                depotTask = task
-            else:
-                if task.pickupID == 0:
-                    pickupTasks[task.taskID] = task
-                    pickupIDs.append(task.taskID)
+        edges = []
+
+        # Li & Lim dataset tasks structure
+        if instances_names_file == 'll.txt':
+            first_line = file.readline()
+
+            # Getting the vehicles and capacity by the first line:
+
+            first_line = first_line.split("\t")
+
+            vehicles = int(first_line[0])
+            capacity = int(first_line[1])
+
+            # Reading of the tasks:
+
+            lines = file.readlines()
+            N_Tasks = len(lines)
+            for line in lines:
+                line = line.split("\t")
+                line = list(map(int, line))
+                task = Task(ID=int(line[0]), x=int(line[1]), y=int(line[2]), demand=int(line[3]), earliestTime=int(line[4]), latestTime=int(line[5]), serviceTime=int(line[6]), pickupID=int(line[7]),  deliveryID=int(line[8]))
+                if task.pickupID == 0 and task.deliveryID == 0:
+                    depotTask = task
                 else:
-                    deliveryTasks[task.taskID] = task
-                    deliveryIDs.append(task.taskID)
+                    if task.pickupID == 0:
+                        pickupTasks[task.taskID] = task
+                        pickupIDs.append(task.taskID)
+                    else:
+                        deliveryTasks[task.taskID] = task
+                        deliveryIDs.append(task.taskID)
+
+        else: # Assuming Carlo's dataset as the only other possibility
+
+            lines = file.readlines()
+            N_Tasks = int(lines[4].split(' ')[1]) # SIZE line
+            capacity = int(lines[9].split(' ')[1]) # CAPACITY line
+
+            # Reading task nodes:
+            for line in lines[11:N_Tasks+11]: # 11th line is where the nodes description starts
+                line = line.split(' ')
+
+                task = Task(ID=int(line[0]), x=float(line[2]), y=float(line[1]), demand=int(line[3]), earliestTime=int(line[4]), latestTime=int(line[5]), serviceTime=int(line[6]), pickupID=int(line[7]), deliveryID=int(line[8]))
+                if task.taskID == 0:
+                    depotTask = task
+                else:
+                    if task.pickupID == 0:
+                        pickupTasks[task.taskID] = task
+                        pickupIDs.append(task.taskID)
+                    else:
+                        deliveryTasks[task.taskID] = task
+                        deliveryIDs.append(task.taskID)
+                #print(task.to_str())
+
+            # Reading edges between tasks:
+            for line in lines[11+N_Tasks+1:]: # (11+N_Task)th is the end of nodes description, plus 1 line for EDGES
+                line = line.split(' ')
+
+                if line[0] != 'EOF':
+                    line = list(map(int, line))
+                    edges.append(line)
 
         file.close()
 
@@ -121,6 +173,8 @@ for inst_line in inst_file_lines:
         # Average Distance, Min Distance & Max Distance:
 
         totalDistance = 0
+        symmetry = 0
+        avgDemand = 0
         distances = []
         minDistance = float('inf')
         maxDistance = float('-inf')
@@ -128,7 +182,13 @@ for inst_line in inst_file_lines:
         for ID in pickupIDs:
             task1 = pickupTasks[ID]
             task2 = deliveryTasks[pickupTasks[ID].deliveryID]
-            distance = distanceTwoTasks(task1, task2)
+
+            if instances_names_file == 'll.txt':
+                distance = distanceTwoTasks(task1, task2)
+            else: # distance
+                distance = edges[task1.taskID][task2.taskID]
+                symmetry += (edges[task1.taskID][task2.taskID] - edges[task2.taskID][task1.taskID]) ** 2
+
             if distance > maxDistance:
                 maxDistance = distance
             elif distance < minDistance:
@@ -141,6 +201,7 @@ for inst_line in inst_file_lines:
         features_list.append(avgDistance)
         features_list.append(minDistance)
         features_list.append(maxDistance)
+        features_list.append(symmetry)
 
         # Standard Deviation of the Distance:
 
@@ -155,7 +216,7 @@ for inst_line in inst_file_lines:
 
         distances.sort()
         if len(distances) % 2 == 0:
-            distanceMedian = (distances[math.floor(len(distances)/2)] + distances[math.floor(len(distances)/2 - 1)]) / 2 # 2 e 3 de 6
+            distanceMedian = (distances[math.floor(len(distances)/2)] + distances[math.floor(len(distances)/2 - 1)]) / 2
         else:
             distanceMedian = distances[math.floor(len(distances)/2)]
 
@@ -222,7 +283,7 @@ for inst_line in inst_file_lines:
 
         features_list.append(np.average(IDs_timespan))
 
-        # Standar deviation timespan
+        # Standard deviation timespan
         features_list.append(np.std(IDs_timespan))
 
         # High/Low time information
@@ -248,6 +309,28 @@ for inst_line in inst_file_lines:
         features_list.append(np.quantile(late_time, q=0.50)) # same as median
         features_list.append(np.quantile(late_time, q=0.75))
 
+        # Average demand for pickup locations
+        demands_sum = 0
+        for pickup_id in pickupIDs:
+            demands_sum += pickupTasks[pickup_id].demand
+        avgDemand = demands_sum / len(pickupTasks)
+
+        features_list.append(avgDemand)
+
+        # Vehicle capacity
+        features_list.append(capacity)
+
+        # Average Service Time
+        services_sum = 0
+        for pickup_id in pickupIDs:
+            services_sum += pickupTasks[pickup_id].serviceTime
+        avgService = services_sum / len(pickupTasks)
+
+        features_list.append(avgService)
+
+        # Depot Time Window by N° of requests ratio
+        features_list.append((depotTask.latestTime - depotTask.earliestTime) / len(pickupTasks))
+        
         # Clusters of data
         if (file_name.lower().startswith("lc") or file_name.lower().startswith("lrc")): # currently working only for li&lim
             xy_data = [[float(pickupTasks[i].x), float(pickupTasks[i].y)] for i in pickupIDs] + [[float(deliveryTasks[i].x), float(deliveryTasks[i].y)] for i in deliveryIDs]
@@ -258,11 +341,10 @@ for inst_line in inst_file_lines:
         else:
             features_list.append(1)
             features_list.append(len(pickupIDs)+len(deliveryIDs))
-        
+
         # Insertion of the features in the CSV file
 
         with open("features.csv", "a", newline='') as features_file:
-            #wr = csv.writer(features_file, dialect='excel')
             wr = csv.writer(features_file)
             wr.writerow(features_list)
         features_file.close()
