@@ -6,6 +6,7 @@ import math
 import os
 import numpy as np
 import graham_scan
+import cluster_points
 
 def distanceTwoTasks(task1, task2):
     dx = task1.x - task2.x
@@ -64,12 +65,15 @@ class Task:
 
 
 
+
 features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "symmetry_index", "stdDeviation", 
                     "distanceMedian", "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", 
                     "convex_hull_length", "points_inside_hull", "convex_hull_area", "average_timespan", 
                     "std_deviation_timespan", "highest_last_time", "highest_early_time", "lowest_last_time", 
                     "lowest_early_time", "Q1_early_time", "Q2_early_time", "Q3_early_time", "Q1_late_time", 
-                    "Q2_late_time", "Q3_late_time", "avgDemand",  "capacity", "avgService", "timeByNumOfRequests"]
+                    "Q2_late_time", "Q3_late_time", "avgDemand",  "capacity", "avgService", "timeByNumOfRequests",
+                    "n_clusters", "avg_clusterSize"]
+
 
 with open("features.csv", "w", newline='') as features_file:
     wr = csv.writer(features_file, dialect='excel')
@@ -317,7 +321,6 @@ for inst_line in inst_file_lines:
         features_list.append(capacity)
 
         # Average Service Time
-
         services_sum = 0
         for pickup_id in pickupIDs:
             services_sum += pickupTasks[pickup_id].serviceTime
@@ -326,8 +329,18 @@ for inst_line in inst_file_lines:
         features_list.append(avgService)
 
         # Depot Time Window by N° of requests ratio
-
         features_list.append((depotTask.latestTime - depotTask.earliestTime) / len(pickupTasks))
+        
+        # Clusters of data
+        if (file_name.lower().startswith("lc") or file_name.lower().startswith("lrc")): # currently working only for li&lim
+            xy_data = [[float(pickupTasks[i].x), float(pickupTasks[i].y)] for i in pickupIDs] + [[float(deliveryTasks[i].x), float(deliveryTasks[i].y)] for i in deliveryIDs]
+            xy_data = np.array(xy_data)
+            n_clusters, avg_size_cluster = cluster_points.number_clusters(xy_data)
+            features_list.append(n_clusters)
+            features_list.append(avg_size_cluster)
+        else:
+            features_list.append(1)
+            features_list.append(len(pickupIDs)+len(deliveryIDs))
 
         # Insertion of the features in the CSV file
 
