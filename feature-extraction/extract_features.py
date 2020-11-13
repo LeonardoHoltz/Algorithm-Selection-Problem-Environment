@@ -162,7 +162,7 @@ for inst_line in inst_file_lines:
             for line in lines[11+N_Tasks+1:]: # (11+N_Task)th is the end of nodes description, plus 1 line for EDGES
                 line = line.split(' ')
 
-                if line[0] != 'EOF':
+                if line[0] != 'EOF' and line[0] != 'EOF\n':
                     line = list(map(int, line))
                     edges.append(line)
 
