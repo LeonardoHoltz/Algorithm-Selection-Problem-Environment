@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# How to execute: python3 extract-features.py instances-names.txt
 
 import sys
 import csv
@@ -66,13 +67,13 @@ class Task:
 
 
 
-features_list = ["instance", "avgDistance", "minDistance", "maxDistance", "symmetry_index", "stdDeviation", 
+features_list = ["instance", "avgDistance", "maxDistance", "symmetry_index", 
                     "distanceMedian", "depotTask-x", "depotTask-y", "N_Tasks", "convex_hull_points", 
                     "convex_hull_length", "points_inside_hull", "convex_hull_area", "average_timespan", 
-                    "std_deviation_timespan", "highest_last_time", "highest_early_time", "lowest_last_time", 
+                    "std_deviation_timespan", "highest_last_time", "highest_early_time",
                     "lowest_early_time", "Q1_early_time", "Q2_early_time", "Q3_early_time", "Q1_late_time", 
-                    "Q2_late_time", "Q3_late_time", "avgDemand",  "capacity", "avgService", "timeByNumOfRequests",
-                    "n_clusters", "avg_clusterSize"]
+                    "Q2_late_time", "Q3_late_time", "avgDemand", "minDemand", "maxDemand", "totalDemand", "capacity", "avgService", "timeByNumOfRequests",
+                    "n_clusters"]
 
 
 with open("features.csv", "w", newline='') as features_file:
@@ -106,7 +107,7 @@ for inst_line in inst_file_lines:
         edges = []
 
         # Li & Lim dataset tasks structure
-        if instances_names_file == 'll.txt':
+        if file_name.lower().startswith("l"):
             first_line = file.readline()
 
             # Getting the vehicles and capacity by the first line:
@@ -185,7 +186,7 @@ for inst_line in inst_file_lines:
             task1 = pickupTasks[ID]
             task2 = deliveryTasks[pickupTasks[ID].deliveryID]
 
-            if instances_names_file == 'll.txt':
+            if file_name.lower().startswith("l"):
                 distance = distanceTwoTasks(task1, task2)
             else: # distance
                 distance = edges[task1.taskID][task2.taskID]
@@ -201,7 +202,7 @@ for inst_line in inst_file_lines:
         avgDistance = totalDistance / (N_Tasks / 2)
 
         features_list.append(avgDistance)
-        features_list.append(minDistance)
+        #features_list.append(minDistance)
         features_list.append(maxDistance)
         features_list.append(symmetry)
 
@@ -212,7 +213,7 @@ for inst_line in inst_file_lines:
             soma = (distance - avgDistance) ** 2
 
         stdDeviation = math.sqrt(soma/(N_Tasks / 2))
-        features_list.append(stdDeviation)
+        #features_list.append(stdDeviation)
 
         # Median Distance:
 
@@ -299,7 +300,7 @@ for inst_line in inst_file_lines:
             # Lowest last time
         features_list.append(np.min(late_time))
             # Lowest early time
-        features_list.append(np.min(early_time))
+        #features_list.append(np.min(early_time))
 
         # Quantile&Median early time
         features_list.append(np.quantile(early_time, q=0.25))
@@ -311,13 +312,30 @@ for inst_line in inst_file_lines:
         features_list.append(np.quantile(late_time, q=0.50)) # same as median
         features_list.append(np.quantile(late_time, q=0.75))
 
-        # Average demand for pickup locations
+        # Demand
+
+        minDemand = float('inf')
+        maxDemand = float('-inf')
+
+        # Max, Min and Average demand for pickup locations
+        
         demands_sum = 0
         for pickup_id in pickupIDs:
-            demands_sum += pickupTasks[pickup_id].demand
+            task_demand = pickupTasks[pickup_id].demand
+            if task_demand > maxDemand:
+                maxDemand = task_demand
+            elif task_demand < minDemand:
+                minDemand = task_demand
+            demands_sum += task_demand
         avgDemand = demands_sum / len(pickupTasks)
 
         features_list.append(avgDemand)
+        features_list.append(minDemand)
+        features_list.append(maxDemand)
+
+        # Total demand
+
+        features_list.append(demands_sum)
 
         # Vehicle capacity
         features_list.append(capacity)
@@ -339,10 +357,10 @@ for inst_line in inst_file_lines:
             xy_data = np.array(xy_data)
             n_clusters, avg_size_cluster = cluster_points.number_clusters(xy_data)
             features_list.append(n_clusters)
-            features_list.append(avg_size_cluster)
+            #features_list.append(avg_size_cluster)
         else:
             features_list.append(1)
-            features_list.append(len(pickupIDs)+len(deliveryIDs))
+            #features_list.append(len(pickupIDs)+len(deliveryIDs))
 
         # Insertion of the features in the CSV file
 
