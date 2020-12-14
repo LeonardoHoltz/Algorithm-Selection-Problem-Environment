@@ -1,0 +1,196 @@
+#------------------------------------------------------------------------------
+# irace: An implementation in R of (Elitist) Iterated Racing
+# Version: 3.3.2238:2239
+# Copyright (C) 2010-2019
+# Manuel Lopez-Ibanez     <manuel.lopez-ibanez@manchester.ac.uk>
+# Jeremie Dubois-Lacoste  
+# Leslie Perez Caceres    <leslie.perez.caceres@ulb.ac.be>
+#
+# This is free software, and you are welcome to redistribute it under certain
+# conditions.  See the GNU General Public License for details. There is NO
+# WARRANTY; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# irace builds upon previous code from the race package:
+#     race: Racing methods for the selection of the best
+#     Copyright (C) 2003 Mauro Birattari
+#------------------------------------------------------------------------------
+# installed at: /usr/lib/R/site-library/irace
+# called with: 
+Warning: A default scenario file './scenario.txt' has been found and will be read
+# 2020-12-12 17:35:59 UTC: Initialization
+# Elitist race
+# Elitist new instances: 1
+# Elitist limit: 2
+# nbIterations: 4
+# minNbSurvival: 4
+# nbParameters: 5
+# seed: 2020
+# confidence level: 0.95
+# budget: 1000
+# mu: 5
+# deterministic: FALSE
+
+# 2020-12-12 17:35:59 UTC: Iteration 1 of 4
+# experimentsUsedSoFar: 0
+# remainingBudget: 1000
+# currentBudget: 250
+# nbConfigurations: 41
+  Markers:
+     x No test is performed.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . All alive configurations are elite and nothing is discarded
+
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|      Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+|x|          1|         41|          6|    3008394.470|         41|01:00:00|   NA|  NA|    NA|
+|x|          2|         41|          2|    3612897.695|         82|02:00:04|+0.27|0.63|0.3555|
+|x|          3|         41|          2|    2609228.867|        123|01:00:00|+0.13|0.42|0.4437|
+|x|          4|         41|          2|    2257950.732|        164|01:00:00|+0.09|0.32|0.3844|
+|=|          5|         41|         12|    2047234.470|        205|01:00:00|+0.01|0.21|0.5369|
+|=|          6|         41|         38|    1906763.897|        246|01:00:00|-0.02|0.15|0.6252|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          38    mean value:     1906763.897
+Description of the best-so-far configuration:
+   .ID.  spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size .PARENT.
+38   38 true            0.87543 original       0.48509         10000             10       NA
+
+# 2020-12-13 00:36:04 UTC: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+     spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size
+38  true            0.87543 original       0.48509         10000             10
+12  true            0.12558 original       0.54475        100000            100
+15 false            0.24367 original       0.62841        100000            100
+6  false            0.43092 original       0.61500        100000             10
+# 2020-12-13 00:36:04 UTC: Iteration 2 of 4
+# experimentsUsedSoFar: 246
+# remainingBudget: 754
+# currentBudget: 251
+# nbConfigurations: 39
+  Markers:
+     x No test is performed.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . All alive configurations are elite and nothing is discarded
+
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|      Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+|x|          7|         39|         75|    4217189.400|         39|02:00:00|   NA|  NA|    NA|
+|x|          2|         39|         12|    4217251.665|         74|01:30:01|+0.42|0.71|0.0652|
+|x|          3|         39|         12|    3012131.513|        109|00:45:00|+0.21|0.47|0.3465|
+|x|          5|         39|         12|    2560200.110|        144|00:45:00|+0.10|0.32|0.6315|
+|-|          1|         18|         12|    2649869.134|        179|00:45:00|-0.08|0.14|0.7965|
+|=|          6|         18|         12|    2408959.450|        193|00:30:00|+0.01|0.18|0.8086|
+|=|          4|         18|         12|    2236839.004|        207|00:30:00|+0.01|0.15|0.6900|
+|=|          8|         18|         12|    2107748.670|        225|00:30:00|+0.01|0.13|0.6018|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          12    mean value:     2107748.670
+Description of the best-so-far configuration:
+   .ID.  spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size .PARENT.
+12   12 true            0.12558 original       0.54475        100000            100       NA
+
+# 2020-12-13 07:51:06 UTC: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+    spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size
+12 true            0.12558 original       0.54475        100000            100
+44 true            0.90791 original       0.27911         10000             10
+38 true            0.87543 original       0.48509         10000             10
+49 true            0.48811 original       0.53316        100000            100
+# 2020-12-13 07:51:06 UTC: Iteration 3 of 4
+# experimentsUsedSoFar: 471
+# remainingBudget: 529
+# currentBudget: 264
+# nbConfigurations: 32
+  Markers:
+     x No test is performed.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . All alive configurations are elite and nothing is discarded
+
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|      Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+|x|          9|         32|         12|    601891.2100|         32|00:45:00|   NA|  NA|    NA|
+|x|          8|         32|         12|    903003.7700|         60|00:45:00|+1.00|1.00|0.0000|
+|x|          4|         32|         12|    1003374.623|         88|00:45:00|+1.00|1.00|0.0000|
+|x|          1|         32|         44|    1504629.585|        116|00:45:00|+0.00|0.25|0.2422|
+|=|          6|         32|         44|    1444585.852|        144|00:45:00|+0.01|0.21|0.3874|
+|-|          5|         19|        103|    1404567.427|        172|00:45:00|-0.03|0.14|0.4705|
+|=|          7|         19|        103|    1806390.920|        187|01:00:13|-0.00|0.14|0.5012|
+|=|          3|         19|        103|    1655828.456|        202|00:30:00|-0.00|0.12|0.4436|
+|=|          2|         19|        103|    1940445.491|        217|01:00:15|+0.01|0.12|0.4582|
+|=|         10|         19|        103|    2047240.389|        236|00:30:00|+0.04|0.13|0.4725|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+Best-so-far configuration:         103    mean value:     2047240.389
+Description of the best-so-far configuration:
+    .ID.  spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size .PARENT.
+103  103 true            0.95653 original       0.46965         10000             10       44
+
+# 2020-12-13 15:21:36 UTC: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+     spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size
+103 true            0.95653 original       0.46965         10000             10
+12  true            0.12558 original       0.54475        100000            100
+93  true            0.37936 original       0.64288        100000            100
+44  true            0.90791 original       0.27911         10000             10
+# 2020-12-13 15:21:36 UTC: Iteration 4 of 4
+# experimentsUsedSoFar: 707
+# remainingBudget: 293
+# currentBudget: 293
+# nbConfigurations: 30
+  Markers:
+     x No test is performed.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . All alive configurations are elite and nothing is discarded
+
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|      Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+|x|         11|         30|         93|    4217171.030|         30|01:30:00|   NA|  NA|    NA|
+|x|          1|         30|        127|    3612822.605|         56|00:45:00|+0.09|0.55|0.5080|
+|x|          6|         30|         44|    2810058.233|         82|00:45:00|-0.11|0.26|0.8816|
+|x|          9|         30|         44|    2258016.478|        108|00:45:00|-0.07|0.20|0.6825|
+|=|          7|         30|        127|    2649826.458|        134|01:30:00|-0.03|0.18|0.6316|
+|=|          8|         30|        127|    2408874.770|        160|00:45:00|-0.02|0.15|0.5500|
+|=|          4|         30|        127|    2236766.421|        186|00:45:00|-0.02|0.13|0.4849|
+|=|          2|         30|         12|    2484347.768|        212|01:30:00|+0.02|0.15|0.4785|
+|=|          3|         30|         12|    2275185.928|        238|00:45:00|+0.02|0.13|0.4393|
+|=|          5|         30|         12|    2168107.925|        264|00:45:00|+0.03|0.12|0.5150|
+|-|         10|         18|         12|    2244511.316|        290|00:45:00|+0.01|0.10|0.5970|
++-+-----------+-----------+-----------+---------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          12    mean value:     2244511.316
+Description of the best-so-far configuration:
+   .ID.  spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size .PARENT.
+12   12 true            0.12558 original       0.54475        100000            100       NA
+
+# 2020-12-14 01:51:37 UTC: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+     spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size
+12  true            0.12558 original       0.54475        100000            100
+93  true            0.37936 original       0.64288        100000            100
+103 true            0.95653 original       0.46965         10000             10
+116 true            0.91297 original       0.47914         10000             10
+# 2020-12-14 01:51:37 UTC: Stopped because there is not enough budget left to race more than the minimum (4)
+# You may either increase the budget or set 'minNbSurvival' to a lower value
+# Iteration: 5
+# nbIterations: 5
+# experimentsUsedSoFar: 997
+# timeUsed: 0
+# remainingBudget: 3
+# currentBudget: 3
+# number of elites: 4
+# nbConfigurations: 3
+# Best configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+     spp alg.perc.pert.size alg.ages alg.pert.prob ages.max.iter ages.pert.size
+12  true            0.12558 original       0.54475        100000            100
+93  true            0.37936 original       0.64288        100000            100
+103 true            0.95653 original       0.46965         10000             10
+116 true            0.91297 original       0.47914         10000             10
+# Best configurations as commandlines (first number is the configuration ID; same order as above):
+12   --alg-use-spp true --alg-perc-pert-size 0.12558 --alg-ages original --alg-pert-prob 0.54475 --ages-max-iter 100000 --ages-pert-size 100
+93   --alg-use-spp true --alg-perc-pert-size 0.37936 --alg-ages original --alg-pert-prob 0.64288 --ages-max-iter 100000 --ages-pert-size 100
+103  --alg-use-spp true --alg-perc-pert-size 0.95653 --alg-ages original --alg-pert-prob 0.46965 --ages-max-iter 10000 --ages-pert-size 10
+116  --alg-use-spp true --alg-perc-pert-size 0.91297 --alg-ages original --alg-pert-prob 0.47914 --ages-max-iter 10000 --ages-pert-size 10
