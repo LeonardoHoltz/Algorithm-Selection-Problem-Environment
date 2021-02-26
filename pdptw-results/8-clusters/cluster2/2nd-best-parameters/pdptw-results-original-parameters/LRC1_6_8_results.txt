@@ -1,0 +1,16 @@
+===== RESULTS =====
+-Initial Solution: valid
+	Vehicles: 46
+	Cost: 25085.67
+	Full cost: 4625085.67
+	Time: 0.01
+----------
+-Final Solution: valid
+	Vehicles: 34
+	Cost: 15118.61
+	Full cost: 3415118.61
+	Time: 1806.89
+	Iterations: 1384
+	Pool: 1806
+	SPP: 23
+----------
