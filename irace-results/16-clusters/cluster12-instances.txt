@@ -1,0 +1,5 @@
+LRC2_8_6.txt -t 3600
+LRC2_8_4.txt -t 3600
+LRC2_8_9.txt -t 3600
+LRC2_8_10.txt -t 3600
+LRC2_8_5.txt -t 3600
