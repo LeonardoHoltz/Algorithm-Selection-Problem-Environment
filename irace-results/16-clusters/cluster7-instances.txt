@@ -1,0 +1,5 @@
+poa-n800-5.txt -t 3600
+bar-n2000-4.txt -t 3600
+poa-n2500-4.txt -t 3600
+poa-n3000-3.txt -t 3600
+bar-n1500-1.txt -t 3600
