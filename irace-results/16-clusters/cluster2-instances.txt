@@ -1,0 +1,5 @@
+LC2_4_7.txt -t 900
+LRC1_4_2.txt -t 900
+lc207.txt -t 300
+LRC1_6_9.txt -t 1800
+LC2_2_9.txt -t 900
