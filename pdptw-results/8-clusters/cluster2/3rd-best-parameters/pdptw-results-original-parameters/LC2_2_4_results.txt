@@ -10,7 +10,7 @@
 	Cost: 1767.12
 	Full cost: 601767.12
 	Time: 900.00
-	Iterations: 2571
-	Pool: 133
+	Iterations: 1818
+	Pool: 112
 	SPP: 1
 ----------

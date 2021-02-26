@@ -7,10 +7,10 @@
 ----------
 -Final Solution: valid
 	Vehicles: 38
-	Cost: 15480.41
-	Full cost: 3815480.41
+	Cost: 15501.61
+	Full cost: 3815501.61
 	Time: 1800.00
-	Iterations: 1828
-	Pool: 1570
-	SPP: 19
+	Iterations: 1136
+	Pool: 1321
+	SPP: 18
 ----------

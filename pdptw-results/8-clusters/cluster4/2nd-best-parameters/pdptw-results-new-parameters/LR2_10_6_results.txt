@@ -6,11 +6,11 @@
 	Time: 0.11
 ----------
 -Final Solution: valid
-	Vehicles: 11
-	Cost: 51153.06
-	Full cost: 1151153.06
+	Vehicles: 12
+	Cost: 52992.29
+	Full cost: 1252992.29
 	Time: 3600.00
-	Iterations: 39
+	Iterations: 24
 	Pool: 0
 	SPP: 0
 ----------

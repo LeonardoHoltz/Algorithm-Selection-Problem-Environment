@@ -3,14 +3,14 @@
 	Vehicles: 7
 	Cost: 12954.43
 	Full cost: 712954.43
-	Time: 0.03
+	Time: 0.05
 ----------
 -Final Solution: valid
 	Vehicles: 5
-	Cost: 6778.73
-	Full cost: 506778.73
+	Cost: 6798.20
+	Full cost: 506798.20
 	Time: 900.00
-	Iterations: 151
+	Iterations: 93
 	Pool: 0
 	SPP: 0
 ----------

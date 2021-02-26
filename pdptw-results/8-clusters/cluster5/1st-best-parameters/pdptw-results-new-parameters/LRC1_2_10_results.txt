@@ -9,8 +9,8 @@
 	Vehicles: 12
 	Cost: 2929.61
 	Full cost: 1202929.61
-	Time: 904.67
-	Iterations: 2377
-	Pool: 708
+	Time: 900.00
+	Iterations: 1993
+	Pool: 643
 	SPP: 5
 ----------
