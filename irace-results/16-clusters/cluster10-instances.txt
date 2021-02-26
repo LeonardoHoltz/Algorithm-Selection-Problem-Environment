@@ -1,0 +1,5 @@
+LR2_4_4.txt -t 900
+LR2_2_6.txt -t 900
+LR2_4_9.txt -t 900
+LRC2_2_5.txt -t 900
+LRC2_2_4.txt -t 900
