@@ -1,0 +1,5 @@
+nyc-n800-2.txt -t 3600
+ber-n400-2.txt -t 900
+lr106.txt -t 300
+nyc-n600-5.txt -t 1800
+ber-n600-6.txt -t 1800
